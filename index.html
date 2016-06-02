@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title></title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/cover.css" rel="stylesheet">
+    <script src="js/ie-emulation-modes-warning.js"></script>
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <a href="#" onClick="javascript:location.reload();"><h3 id="pageTitle" class="masthead-brand"></h3></a>
+			  <nav>
+                <ul class="nav masthead-nav">
+					<li><a href="#"></a>					
+					</li>
+					<li><a id="about" href="#" onClick="javascript:$('#aboutModal').modal('show');return false;"></a></li>
+					<li class="dropdown">
+					  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="langSelection" style="background-color:#333131;"><span class="caret"></span></a>
+					  <ul class="dropdown-menu">
+						<li><a id="selectEnglish" href="#">English</a></li>
+						<li><a id="selectPtBr" href="#">Brazilian Portuguese</a></li>						
+					  </ul>
+					</li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 id="headTitle" class="cover-heading"></h1>
+            <h4 id="score" class="lead">
+			</h3>
+            <p class="lead">
+              <a id="btnPlay" href="#" class="btn btn-lg btn-default" onClick="javascript:createTable();return false;"></a>
+            </p>
+          </div>
+		  <div id="gameArea"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+	<div class="modal modal-wide fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 class="modal-title" id="modalHead"></h3>						  
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-xs-7">
+							<a style="color: black" href="http://wesleyosorio.xyz" target="blank">
+								<img src="img/wesleyLogo.png" class="img-circle">
+								<div id="devBy"></div>Wesley Osorio
+							</a>
+						</div>
+						<div class="col-xs-2">
+							<a style="color: black" href="https://github.com/Welpato" target="blank">
+								<img src="img/githubLogo.png" class="img-circle">
+								<div>Fork on GitHub</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+	<!-- Language script -->
+	<script src="js/language.js"></script>
+	<div id="scriptLang"><script src="js/lang/en.js"></script></div>
+	<!-- The game script -->
+	<script src="js/game.js"></script>
+  </body>
+</html>

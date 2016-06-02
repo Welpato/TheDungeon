@@ -1,0 +1,206 @@
+lang = 'pt-BR';
+floor = '<img height="30" width="30" src="img/floor.png">';
+warrior = '<img height="30" width="30" src="img/warrior.png">';
+tree = '<img height="30" width="30" src="img/tree.png">';
+skeleton = '<img height="30" width="30" src="img/skeleton.png">';
+turnCount = 3;
+breakCount = 3;
+moves = 0;
+enemies = 4;
+enemiesCount = 5;
+level = 1;
+score = 0;
+x = 9;
+y = 9;
+
+function createTable(restart = true){
+	if(restart){
+		moves = 0;
+		level = 1;
+		refreshScore(score = 0, turnCount = 3, breakCount = 3);
+	}else{
+		level++;
+		refreshScore(score, turnCount = 3, breakCount = 3);
+	}
+	enemiesCount = enemies + level;
+	xc = 1;
+	yc = 1;
+	HTML = "<table class='table table-bordered row'>";	
+	while(yc <= y){		
+		HTML= HTML.concat("<tr>");
+		xc = 1;
+		while(xc <= x){
+			HTML = HTML.concat('<td href="#" onClick="celClick(this.id);" style="background-image:url(img/floor.png);background-size:47px 47px; width: 47px; height: 47px;" id="');
+			HTML = HTML.concat(yc);
+			HTML = HTML.concat(xc);
+			HTML = HTML.concat('"></td>');
+			xc++; 
+		}
+		HTML = HTML.concat("</tr>");
+		yc++;
+	}
+	HTML = HTML.concat("</table>");
+	$("#gameArea").text('');
+	$("#gameArea").append(HTML);
+	fillTable();
+	beginningText = false;
+	changeTexts();
+}
+
+function celClick(cel){
+	celValue = document.getElementById(cel).innerHTML;
+	moveRealized = false;
+	if(celValue == warrior){
+		if(passTurn()){
+			moveRealized = true;
+		}
+	}else if(celValue == tree){
+		pos = verifyPos(cel,warrior);
+		if(pos != false && treeBreak()){
+			$("#"+cel).text("");
+			moveRealized = true;
+		}
+	}else if(celValue == "" || celValue == skeleton){
+		posOri = verifyPos(cel,warrior);
+		if(posOri != false){
+			if(celValue == skeleton){
+				refreshScore(score+= 50, turnCount, breakCount);
+				enemiesCount--;
+			}
+			$("#"+posOri).text("");
+			$("#"+cel).html(warrior);
+			
+			moveRealized = true;
+		}
+	}
+	if(moveRealized){
+		moveEnemies();
+	}
+}
+
+function verifyPos(cel,verifyValue){
+	if($("#"+cel[0].toString()+(parseInt(cel[1]) - 1).toString()).html() == verifyValue){
+		return cel[0].toString()+(parseInt(cel[1]) - 1).toString();
+	}else if($("#"+cel[0].toString()+(parseInt(cel[1]) + 1).toString()).html() == verifyValue){
+		return cel[0].toString()+(parseInt(cel[1]) + 1).toString();
+	}else if($("#"+(parseInt(cel[0]) - 1).toString() + cel[1].toString()).html() == verifyValue){
+		return (parseInt(cel[0]) - 1).toString() + cel[1].toString();
+	}else if($("#"+(parseInt(cel[0]) + 1).toString() + cel[1].toString()).html() == verifyValue){
+		return (parseInt(cel[0]) + 1).toString() + cel[1].toString();
+	}else{
+		return false;
+	}
+}
+
+function passTurn(){
+	if (turnCount > 0){
+		turnCount--;
+		refreshScore(score-= 30, turnCount, breakCount);
+		return true;
+	}
+	else{
+		alert(textMessages.usedTurns);
+		return false;
+	}
+}
+
+function treeBreak(){
+	if (breakCount > 0){
+		breakCount--;
+		refreshScore(score, turnCount, breakCount);
+		return true;
+	}
+	else{
+		alert(textMessages.usedTrees);
+		return false;
+	}
+}
+
+function fillTable(){
+	$('#14').html(warrior);
+	i = 0;
+	
+	while(i<enemiesCount){
+		rand = Math.floor((Math.random() * 100) + 1);
+		if(rand >= 30 && rand < 100 && rand.toString()[1] != '0'){
+			if($("#"+rand).html() == ""){
+				$("#"+rand).html(skeleton)
+				i++;
+			}
+		}
+	}
+	treeTotal = 30-enemiesCount;
+	c = 0;
+	while(c<treeTotal){
+		rand = Math.floor((Math.random() * 100) + 1);
+		if(rand >= 20 && rand < 100 && rand.toString()[1] != '0'){
+			if($("#"+rand).html() == ""){
+				$("#"+rand).html(tree)
+				c++;
+			}
+		}
+	}
+}
+
+function moveEnemies(){
+	if(enemiesCount == 0){
+		createTable(false);
+	}else{
+		yc = 1;
+		moves++;
+		var alreadyMoved = [];
+		while(yc <= y){		
+			xc = 1;
+			while(xc <= x){
+				if($("#"+yc.toString()+xc.toString()).html() == skeleton && alreadyMoved.indexOf(yc.toString()+xc.toString()) == -1){
+					if(verifyPos(yc.toString()+xc.toString(),warrior)){						
+						alert(textMessages.youlose);
+						createTable();
+						break;
+					}else{
+						rand = Math.floor((Math.random() * 100) + 1);
+						if(rand >= 0 && rand <= 25){//Down
+							if(yc != 9 && $("#"+(yc+1).toString()+xc.toString()).html() != skeleton
+										&& $("#"+(yc+1).toString()+xc.toString()).html() != tree){
+								$("#"+yc.toString()+xc.toString()).text("");								
+								$("#"+(yc+1).toString()+xc.toString()).html(skeleton);
+								alreadyMoved.push((yc+1).toString()+xc.toString());
+							}
+						}else if(rand > 25 && rand <= 50){//Up
+							if(yc != 1 && $("#"+(yc-1).toString()+xc.toString()).html() != skeleton
+										&& $("#"+(yc-1).toString()+xc.toString()).html() != tree){
+								$("#"+yc.toString()+xc.toString()).text("");
+								$("#"+(yc-1).toString()+xc.toString()).html(skeleton);
+								alreadyMoved.push((yc-1).toString()+xc.toString());
+							}
+						}else if(rand > 50 && rand <= 75){//Right
+							if(xc != 9 && $("#"+yc.toString()+(xc+1).toString()).html() != skeleton
+										&& $("#"+yc.toString()+(xc+1).toString()).html() != tree){
+								$("#"+yc.toString()+xc.toString()).text("");
+								$("#"+(yc).toString()+(xc+1).toString()).html(skeleton);
+								alreadyMoved.push((yc).toString()+(xc+1).toString());
+							}
+						}else if(rand > 75 && rand <= 100){//Left
+							if(xc != 1 && $("#"+yc.toString()+(xc-1).toString()).html() != skeleton
+										&& $("#"+yc.toString()+(xc-1).toString()).html() != tree){
+								$("#"+yc.toString()+xc.toString()).text("");
+								$("#"+yc.toString()+(xc-1).toString()).html(skeleton);
+								alreadyMoved.push((yc).toString()+(xc-1).toString());
+							}
+						}
+					}
+				}
+				xc++;
+			}
+			yc++;
+		}
+		refreshScore(score,turnCount, breakCount);
+	}
+	
+}
+
+function refreshScore(valueScore, valueTurn, valueTreeBreak){
+	$("#score").text(textMessages.score+valueScore+textMessages.level+ level+textMessages.moves+ moves + 
+					 textMessages.pTurn+valueTurn+textMessages.bTree+valueTreeBreak);
+}
+
