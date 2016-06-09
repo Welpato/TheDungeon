@@ -1,8 +1,8 @@
 lang = 'pt-BR';
 floor = '<img height="30" width="30" src="img/floor.png">';
-warrior = '<img height="30" width="30" src="img/warrior.png">';
-tree = '<img height="30" width="30" src="img/tree.png">';
-skeleton = '<img height="30" width="30" src="img/skeleton.png">';
+warrior = '<img id="warrior" height="30" width="30" src="img/warrior.png">';
+tree = '<img id="tree" height="30" width="30" src="img/tree.png">';
+skeleton = '<img id="skeleton" height="30" width="30" src="img/skeleton.png">';
 turnCount = 3;
 breakCount = 3;
 moves = 0;
@@ -48,22 +48,22 @@ function createTable(restart = true){
 }
 
 function celClick(cel){
-	celValue = document.getElementById(cel).innerHTML;
+	celValue = $(document.getElementById(cel).innerHTML).attr("id");
 	moveRealized = false;
-	if(celValue == warrior){
+	if(celValue == 'warrior'){
 		if(passTurn()){
 			moveRealized = true;
 		}
-	}else if(celValue == tree){
-		pos = verifyPos(cel,warrior);
+	}else if(celValue == 'tree'){
+		pos = verifyPos(cel,'warrior');
 		if(pos != false && treeBreak()){
 			$("#"+cel).text("");
 			moveRealized = true;
 		}
-	}else if(celValue == "" || celValue == skeleton){
-		posOri = verifyPos(cel,warrior);
+	}else if(celValue == undefined || celValue == 'skeleton'){
+		posOri = verifyPos(cel,'warrior');
 		if(posOri != false){
-			if(celValue == skeleton){
+			if(celValue == 'skeleton'){
 				refreshScore(score+= 50, turnCount, breakCount);
 				enemiesCount--;
 			}
@@ -79,13 +79,13 @@ function celClick(cel){
 }
 
 function verifyPos(cel,verifyValue){
-	if($("#"+cel[0].toString()+(parseInt(cel[1]) - 1).toString()).html() == verifyValue){
+	if($($("#"+cel[0].toString()+(parseInt(cel[1]) - 1).toString()).html()).attr("id") == verifyValue){
 		return cel[0].toString()+(parseInt(cel[1]) - 1).toString();
-	}else if($("#"+cel[0].toString()+(parseInt(cel[1]) + 1).toString()).html() == verifyValue){
+	}else if($($("#"+cel[0].toString()+(parseInt(cel[1]) + 1).toString()).html()).attr("id") == verifyValue){
 		return cel[0].toString()+(parseInt(cel[1]) + 1).toString();
-	}else if($("#"+(parseInt(cel[0]) - 1).toString() + cel[1].toString()).html() == verifyValue){
+	}else if($($("#"+(parseInt(cel[0]) - 1).toString() + cel[1].toString()).html()).attr("id") == verifyValue){
 		return (parseInt(cel[0]) - 1).toString() + cel[1].toString();
-	}else if($("#"+(parseInt(cel[0]) + 1).toString() + cel[1].toString()).html() == verifyValue){
+	}else if($($("#"+(parseInt(cel[0]) + 1).toString() + cel[1].toString()).html()).attr("id") == verifyValue){
 		return (parseInt(cel[0]) + 1).toString() + cel[1].toString();
 	}else{
 		return false;
@@ -152,37 +152,37 @@ function moveEnemies(){
 		while(yc <= y){		
 			xc = 1;
 			while(xc <= x){
-				if($("#"+yc.toString()+xc.toString()).html() == skeleton && alreadyMoved.indexOf(yc.toString()+xc.toString()) == -1){
-					if(verifyPos(yc.toString()+xc.toString(),warrior)){						
+				if($($("#"+yc.toString()+xc.toString()).html()).attr("id") == 'skeleton' && alreadyMoved.indexOf(yc.toString()+xc.toString()) == -1){
+					if(verifyPos(yc.toString()+xc.toString(),'warrior')){						
 						alert(textMessages.youlose);
 						createTable();
 						break;
 					}else{
 						rand = Math.floor((Math.random() * 100) + 1);
 						if(rand >= 0 && rand <= 25){//Down
-							if(yc != 9 && $("#"+(yc+1).toString()+xc.toString()).html() != skeleton
-										&& $("#"+(yc+1).toString()+xc.toString()).html() != tree){
+							if(yc != 9 && $($("#"+(yc+1).toString()+xc.toString()).html()).attr("id") != 'skeleton'
+										&& $($("#"+(yc+1).toString()+xc.toString()).html()).attr("id") != 'tree'){
 								$("#"+yc.toString()+xc.toString()).text("");								
 								$("#"+(yc+1).toString()+xc.toString()).html(skeleton);
 								alreadyMoved.push((yc+1).toString()+xc.toString());
 							}
 						}else if(rand > 25 && rand <= 50){//Up
-							if(yc != 1 && $("#"+(yc-1).toString()+xc.toString()).html() != skeleton
-										&& $("#"+(yc-1).toString()+xc.toString()).html() != tree){
+							if(yc != 1 && $($("#"+(yc-1).toString()+xc.toString()).html()).attr("id") != 'skeleton'
+										&& $($("#"+(yc-1).toString()+xc.toString()).html()).attr("id") != 'tree'){
 								$("#"+yc.toString()+xc.toString()).text("");
 								$("#"+(yc-1).toString()+xc.toString()).html(skeleton);
 								alreadyMoved.push((yc-1).toString()+xc.toString());
 							}
 						}else if(rand > 50 && rand <= 75){//Right
-							if(xc != 9 && $("#"+yc.toString()+(xc+1).toString()).html() != skeleton
-										&& $("#"+yc.toString()+(xc+1).toString()).html() != tree){
+							if(xc != 9 && $($("#"+yc.toString()+(xc+1).toString()).html()).attr("id") != 'skeleton'
+										&& $($("#"+yc.toString()+(xc+1).toString()).html()).attr("id") != 'tree'){
 								$("#"+yc.toString()+xc.toString()).text("");
 								$("#"+(yc).toString()+(xc+1).toString()).html(skeleton);
 								alreadyMoved.push((yc).toString()+(xc+1).toString());
 							}
 						}else if(rand > 75 && rand <= 100){//Left
-							if(xc != 1 && $("#"+yc.toString()+(xc-1).toString()).html() != skeleton
-										&& $("#"+yc.toString()+(xc-1).toString()).html() != tree){
+							if(xc != 1 && $($("#"+yc.toString()+(xc-1).toString()).html()).attr("id") != 'skeleton'
+										&& $($("#"+yc.toString()+(xc-1).toString()).html()).attr("id") != 'tree'){
 								$("#"+yc.toString()+xc.toString()).text("");
 								$("#"+yc.toString()+(xc-1).toString()).html(skeleton);
 								alreadyMoved.push((yc).toString()+(xc-1).toString());
