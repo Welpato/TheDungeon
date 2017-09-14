@@ -1,15 +1,15 @@
-gen = 0
-genome = 0
-species = 0
-
 class playerSpiece(){
-  construct(gen, genome, specie, enviroment){
-    this.gen = gen
-    this.genome = genome
+  construct(generation, specie, genome, enviroment){
+    this.gen = generation
     this.specie = specie
+    this.genome = genome
     this.fitness = 0
     this.enviroment = enviroment
 
+  }
+
+  function addFitness(addedValue){
+    this.fitness +=  addedValue
   }
 
   function returnMove(){
