@@ -163,7 +163,6 @@ function moveEnemies(){
 						break
 					}else{
 						rand = Math.floor( ( Math.random() * 100 ) + 1 )
-            rand = 26 //REMOVE THIS AFTER DEBUGGING
 						if( rand >= 0 && rand <= 25 ){//Down
 							if( yc != 9 && $( $( "#" + ( yc + 1 ).toString() + xc.toString() ).html() ).attr( "id" ) != 'skeleton'
 										&& $( $( "#" + ( yc + 1 ).toString() + xc.toString() ).html() ).attr( "id" ) != 'tree' ){
@@ -233,7 +232,6 @@ function stopAutoPlay(){
   for( var time in timeOutControl ){
     clearTimeout( time )
   }
-
 }
 
 function getEnviroment(){
@@ -282,26 +280,21 @@ class playerSpiece{
   }
 
   returnMove(){
-    //s = 0.5
     this.enviroment = getEnviroment()
     var posWarrior = this.warriorPosition()
-    cel = String( parseInt( posWarrior ) + 1 )
-    return cel
-    /*if( s >= 0 && s < 0.17 ){ // up
-      return 1
-    }else if(s >= 0.17 && s < 0.33){ // down
-      return 2
-    }else if(s >= 0.33 && s < 0.49){ //left
-      return 2
-    }else if(s >= 0.49 && s < 0.65){ //right
-      return 2
-    }else if(s >= 0.65 && x < 0.8){ //break tree
-      return 2
-      //one problem... what is the position of the tree that we will break?
-    }else if(s >= 0.8 && s < 1){ //pass turn
-      return 2
+    var s = Math.random()
+    if( s >= 0 && s < 0.25 ){ // up
+      cel = String( parseInt( posWarrior ) - 10 )
+    }else if(s >= 0.25 && s < 0.5){ // down
+      cel = String( parseInt( posWarrior ) + 10 )
+    }else if(s >= 0.5 && s < 0.75){ //left
+      cel = String( parseInt( posWarrior ) - 1 )
+    }else if(s >= 0.75 && s < 1){ //right
+      cel = String( parseInt( posWarrior ) + 1 )
+    }/*else if(s >= 0.8 && s < 1){ //pass turn
+      cel = String( parseInt( posWarrior ) )
     }*/
-
+    return cel
   }
 
   sigmoid( x, deriv = false ){
