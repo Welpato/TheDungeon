@@ -1,51 +1,52 @@
 //-------------------------------- GAME SCRIPT ------------------------
-lang = 'pt-BR';
-floor = '<img height="30" width="30" src="img/floor.png">';
-warrior = '<img id="warrior" height="30" width="30" src="img/warrior.png">';
-tree = '<img id="tree" height="30" width="30" src="img/tree.png">';
-skeleton = '<img id="skeleton" height="30" width="30" src="img/skeleton.png">';
-turnCount = 3;
-breakCount = 3;
-moves = 0;
-enemies = 4;
-enemiesCount = 5;
-level = 1;
-score = 0;
+lang = 'pt-BR'
+floor = '<img height="30" width="30" src="img/floor.png">'
+warrior = '<img id="warrior" height="30" width="30" src="img/warrior.png">'
+tree = '<img id="tree" height="30" width="30" src="img/tree.png">'
+skeleton = '<img id="skeleton" height="30" width="30" src="img/skeleton.png">'
+turnCount = 3
+breakCount = 3
+moves = 0
+enemies = 4
+enemiesCount = 5
+level = 1
+score = 0
 
-createTable();
+createTable()
 
 function createTable(restart = true){
 	if(restart){
-		moves = 0;
-		level = 1;
-		refreshScore(score = 0, turnCount = 3, breakCount = 3);
+		moves = 0
+		level = 1
+		stopAutoPlay()
+		refreshScore(score = 0, turnCount = 3, breakCount = 3)
 	}else{
-		level++;
-		refreshScore(score, turnCount = 3, breakCount = 3);
+		level++
+		refreshScore(score, turnCount = 3, breakCount = 3)
 	}
-	enemiesCount = enemies + level;
-	xc = 1;
-	yc = 1;
-	HTML = "<table class='table table-bordered row'>";
+	enemiesCount = enemies + level
+	xc = 1
+	yc = 1
+	HTML = "<table class='table table-bordered row'>"
 	while(yc <= 9){
-		HTML= HTML.concat("<tr>");
-		xc = 1;
+		HTML= HTML.concat("<tr>")
+		xc = 1
 		while(xc <= 9){
-			HTML = HTML.concat('<td href="#" onClick="celClick(this.id);" style="background-image:url(img/floor.png);background-size:47px 47px; width: 47px; height: 47px;" id="');
-			HTML = HTML.concat(yc);
-			HTML = HTML.concat(xc);
-			HTML = HTML.concat('"></td>');
-			xc++;
+			HTML = HTML.concat('<td href="#" onClick="celClick(this.id);" style="background-image:url(img/floor.png);background-size:47px 47px; width: 47px; height: 47px;" id="')
+			HTML = HTML.concat(yc)
+			HTML = HTML.concat(xc)
+			HTML = HTML.concat('"></td>')
+			xc++
 		}
-		HTML = HTML.concat("</tr>");
-		yc++;
+		HTML = HTML.concat("</tr>")
+		yc++
 	}
-	HTML = HTML.concat("</table>");
-	$("#gameArea").text('');
-	$("#gameArea").append(HTML);
-	fillTable();
-	beginningText = false;
-	changeTexts();
+	HTML = HTML.concat("</table>")
+	$("#gameArea").text('')
+	$("#gameArea").append(HTML)
+	fillTable()
+	beginningText = false
+	changeTexts()
 }
 
 function celClick(cel){
@@ -82,64 +83,64 @@ function celClick(cel){
 
 function verifyPos(cel,verifyValue){
 	if($($("#"+cel[0].toString()+(parseInt(cel[1]) - 1).toString()).html()).attr("id") == verifyValue){
-		return cel[0].toString()+(parseInt(cel[1]) - 1).toString();
+		return cel[0].toString()+(parseInt(cel[1]) - 1).toString()
 	}else if($($("#"+cel[0].toString()+(parseInt(cel[1]) + 1).toString()).html()).attr("id") == verifyValue){
-		return cel[0].toString()+(parseInt(cel[1]) + 1).toString();
+		return cel[0].toString()+(parseInt(cel[1]) + 1).toString()
 	}else if($($("#"+(parseInt(cel[0]) - 1).toString() + cel[1].toString()).html()).attr("id") == verifyValue){
-		return (parseInt(cel[0]) - 1).toString() + cel[1].toString();
+		return (parseInt(cel[0]) - 1).toString() + cel[1].toString()
 	}else if($($("#"+(parseInt(cel[0]) + 1).toString() + cel[1].toString()).html()).attr("id") == verifyValue){
-		return (parseInt(cel[0]) + 1).toString() + cel[1].toString();
+		return (parseInt(cel[0]) + 1).toString() + cel[1].toString()
 	}else{
-		return false;
+		return false
 	}
 }
 
 function passTurn(){
 	if (turnCount > 0){
-		turnCount--;
-		refreshScore(score-= 30, turnCount, breakCount);
-		return true;
+		turnCount--
+		refreshScore(score-= 30, turnCount, breakCount)
+		return true
 	}
 	else{
-		alert(textMessages.usedTurns);
-		return false;
+		alert(textMessages.usedTurns)
+		return false
 	}
 }
 
 function treeBreak(){
 	if (breakCount > 0){
-		breakCount--;
-		refreshScore(score, turnCount, breakCount);
-		return true;
+		breakCount--
+		refreshScore(score, turnCount, breakCount)
+		return true
 	}
 	else{
-		alert(textMessages.usedTrees);
-		return false;
+		alert(textMessages.usedTrees)
+		return false
 	}
 }
 
 function fillTable(){
-	$('#14').html(warrior);
-	i = 0;
+	$('#14').html(warrior)
+	i = 0
 
 	while(i<enemiesCount){
-		rand = Math.floor((Math.random() * 100) + 1);
+		rand = Math.floor((Math.random() * 100) + 1)
 		if(rand >= 30 && rand < 100 && rand.toString()[1] != '0'){
 			if($("#"+rand).html() == ""){
 				$("#"+rand).html(skeleton)
-				i++;
+				i++
 			}
 		}
 	}
-	treeTotal = 30-enemiesCount;
+	treeTotal = 30-enemiesCount
   treeTotal = 0 // Remove this code when the tree problem has done
-  c = 0;
+  c = 0
 	while(c<treeTotal){
-		rand = Math.floor((Math.random() * 100) + 1);
+		rand = Math.floor((Math.random() * 100) + 1)
 		if(rand >= 20 && rand < 100 && rand.toString()[1] != '0'){
 			if($("#"+rand).html() == ""){
 				$("#"+rand).html(tree)
-				c++;
+				c++
 			}
 		}
 	}
@@ -194,9 +195,9 @@ function moveEnemies(){
 						}
 					}
 				}
-				xc++;
+				xc++
 			}
-			yc++;
+			yc++
 		}
 		refreshScore(score,turnCount, breakCount)
     return true
@@ -206,16 +207,19 @@ function moveEnemies(){
 
 function refreshScore(valueScore, valueTurn, valueTreeBreak){
 	$("#score").text(textMessages.score+valueScore+textMessages.level+ level+textMessages.moves+ moves +
-					 textMessages.pTurn+valueTurn+textMessages.bTree+valueTreeBreak);
+					 textMessages.pTurn+valueTurn+textMessages.bTree+valueTreeBreak)
 }
 
 //-------- END OF GAME SCRIPT ------------------------
 //-------- PLAYER AI SCRIPT --------------------------
 var timeOutControl = []
+var generations = 10
+var population = 50
+
 function startAutoPlay(){
   player = new playerSpiece
   player.construct( 0,0,0 )
-  var i = 0;
+  var i = 0
   while ( i < 10000 ) {
     (function( i ) {
       timeOutControl.push( setTimeout( function() {
