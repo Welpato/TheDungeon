@@ -10,12 +10,10 @@ var enemies = 4
 var enemiesCount = 5
 var level = 1
 var score = 0
-var x = 9
-var y = 9
 
 function createTable( restart = true ){
 	if( restart ){
-		var moves = 0
+		moves = 0
 		level = 1
 		refreshScore( score = 0, turnCount = 3, breakCount = 3 )
 	}else{
@@ -26,10 +24,10 @@ function createTable( restart = true ){
 	var xc = 1
 	var yc = 1
 	HTML = "<table class='table table-bordered row'>"
-	while( yc <= y ){
+	while( yc <= 9 ){
 		HTML= HTML.concat("<tr>")
 		xc = 1
-		while( xc <= x ){
+		while( xc <= 9 ){
 			HTML = HTML.concat( '<td href="#" onClick="celClick(this.id);" style="background-image:url(img/floor.png);background-size:47px 47px; width: 47px; height: 47px;" id="' )
 			HTML = HTML.concat( yc )
 			HTML = HTML.concat( xc )
@@ -129,7 +127,8 @@ function fillTable(){
 			}
 		}
 	}
-	treeTotal = 30 - enemiesCount
+	var treeTotal = 30 - enemiesCount
+	treeTotal = 0 //Only for the early development of the AI
 	c = 0
 	while( c < treeTotal ){
 		rand = Math.floor( ( Math.random() * 100 ) + 1 )
@@ -150,9 +149,9 @@ function moveEnemies(){
 		moves++
 		var alreadyMoved = []
 		var rand = 0
-		while( yc <= y ){
+		while( yc <= 9 ){
 			var xc = 1
-			while( xc <= x ){
+			while( xc <= 9 ){
 				if( $( $( "#" + yc.toString() + xc.toString() ).html() ).attr( "id" ) == 'skeleton' && alreadyMoved.indexOf( yc.toString() + xc.toString() ) == -1 ){
 					if( verifyPos( yc.toString() + xc.toString(), 'warrior' ) ){
 						alert( textMessages.youlose )
