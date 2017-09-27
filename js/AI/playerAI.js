@@ -215,6 +215,7 @@ function refreshScore(valueScore, valueTurn, valueTreeBreak){
 var timeOutControl = []
 var generations = 10
 var population = 50
+var speed = 1000
 
 function startAutoPlay(){
   player = new playerSpiece
@@ -227,7 +228,7 @@ function startAutoPlay(){
         if( alive == false ){
           stopAutoPlay()
         }
-    }, 1000 * i ))
+    }, speed * i ))
     })( i++ )
   }
 }
