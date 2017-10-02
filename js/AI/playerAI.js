@@ -4,6 +4,8 @@ var generations = 10
 var population = 50
 var speed = 1000
 
+createTable() //Put this here to not be needed read the rules and click on the play button
+
 function startAutoPlay(){
   player = new playerSpiece
   player.construct( 0,0,0 )
