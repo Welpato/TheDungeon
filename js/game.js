@@ -10,6 +10,7 @@ var enemies = 4
 var enemiesCount = 5
 var level = 1
 var score = 0
+var UsingAI = false
 
 function createTable( restart = true ){
 	if( restart ){
@@ -72,8 +73,9 @@ function celClick( cel ){
 		}
 	}
 	if( moveRealized ){
-		moveEnemies()
+		return moveEnemies()
 	}
+	return false
 }
 
 function verifyPos( cel, verifyValue ){
@@ -154,8 +156,11 @@ function moveEnemies(){
 			while( xc <= 9 ){
 				if( $( $( "#" + yc.toString() + xc.toString() ).html() ).attr( "id" ) == 'skeleton' && alreadyMoved.indexOf( yc.toString() + xc.toString() ) == -1 ){
 					if( verifyPos( yc.toString() + xc.toString(), 'warrior' ) ){
-						alert( textMessages.youlose )
+						if( UsingAI == false ){
+							alert( textMessages.youlose )
+						}
 						createTable()
+						return false
 						break
 					}else{
 						rand = Math.floor( ( Math.random() * 100 ) + 1 )
@@ -195,6 +200,7 @@ function moveEnemies(){
 			yc++
 		}
 		refreshScore( score, turnCount, breakCount )
+		return true
 	}
 
 }
