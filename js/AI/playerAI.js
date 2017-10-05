@@ -11,29 +11,32 @@ createTable() //Put this here to not be needed read the rules and click on the p
 
 function startAutoPlay(){
   var arrPopulation = []
-  for( var genControl = 0; genControl < generations; genControl++ ){
-    arrPopulation.push([])
-    for( var popControl = 0; popControl < population; popControl++ ){
-      arrPopulation[genControl].push( new playerSpecimen )
-      arrPopulation[genControl][popControl].construct( genControl, popControl, 0 )
-      arrPopulation[genControl][popControl] = specimenPlay( arrPopulation[genControl][popControl] )
-      console.log( "Generation : "+ genControl + " Specimen Number: " + population + " Fitness: " + arrPopulation[genControl][popControl].fitness )
+  timeOutControl.push(setInterval(function(){
+    for( var genControl = 0; genControl < generations; genControl++ ){
+      arrPopulation.push([])
+      for( var popControl = 0; popControl < population; popControl++ ){
+        updateGenerationInfo( genControl, popControl, 0, 0, 0)
+        arrPopulation[genControl].push( new playerSpecimen )
+        arrPopulation[genControl][popControl].construct( genControl, popControl, 0 )
+        arrPopulation[genControl][popControl] = specimenPlay( arrPopulation[genControl][popControl] )
+        console.log( "Generation : "+ genControl + " Specimen Number: " + population + " Fitness: " + arrPopulation[genControl][popControl].fitness )
+      }
     }
-  }
+    stopAutoPlay()
+  }, speed))
   console.log(arrPopulation)
 }
 
-
 function specimenPlay( specimen ){
   for ( var i = 0; i < 10000; i++ ) {
-    timeOutControl = setInterval(function(){
+    timeOutControl.push(setInterval(function(){
       specimen.fitness = score + moves
       var alive = celClick( specimen.returnMove() )
       if( alive == false ){
         stopAutoPlay()
         return specimen
       }
-    }, speed)
+    }, speed))
   }
   return specimen
 }
@@ -60,6 +63,11 @@ function getEnviroment(){
       x++
     }
     return enviroment
+}
+
+function updateGenerationInfo( generation, specimen, fitnessGeneration, fitnessSpecimen, fitness ){
+  $( "#generationInfo" ).text( "Generation: " + generation + " Specimen: " + specimen )
+  $( "#bestFitnessInfo" ).text( "Best Fitness: "+ fitness + " Generation: " + fitnessGeneration + " Specimen: " + fitnessSpecimen )
 }
 
 class playerSpecimen{
