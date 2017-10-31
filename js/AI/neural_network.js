@@ -1,6 +1,6 @@
 class NeuralNetwork{
   constructor(){
-    this.synaptic_weights = this.randomSynaptic( 3, 5 )
+    this.synaptic_weights = this.randomSynaptic( 9, 5 ) //input layer
     this.synaptic_weights2 = this.randomSynaptic( 5, 4 )
     this.synaptic_weights3 = this.randomSynaptic( 4, 1 )
   }
@@ -55,8 +55,9 @@ class NeuralNetwork{
     return returnValue
   }
 
-  think( inputs ){
+  think( inputs ){ //The input will be the enviroment
     var a2 = this.dot( inputs, this.synaptic_weights )
+    console.log(this.synaptic_weights)
     a2 = this.arraySigmoid( a2 )
 
     var a3 = this.dot( a2, this.synaptic_weights2 )
@@ -82,6 +83,7 @@ class NeuralNetwork{
     return result
   }
 
+  /* This part of the code i believe that will not be needed, maybe only the backpropagation part
   adjust( adjust, weight ){
     for( var x in adjust ){
       for( var y in adjust[ x ] ){
@@ -135,25 +137,5 @@ class NeuralNetwork{
 
       i++
     }
-  }
+  }*/
 }
-
-var training_set_inputs = [ [ 0,0,1 ], [ 1,1,1 ],[ 1,0,1 ],[ 0,1,1 ] ]
-var training_set_outputs = [ 0,1,1,0 ]
-
-var new_situation = [ [ 0,1,1 ] ]
-
-var neural_network = new NeuralNetwork()
-document.write( "Old weights <br>")
-document.write( neural_network.synaptic_weights )
-document.write( "<br>" )
-document.write( "New weights <br>" )
-neural_network.train( training_set_inputs, training_set_outputs, 10000 )
-document.write( neural_network.synaptic_weights )
-document.write( "<br>" )
-document.write( "<br>" )
-document.write( "New situation: " )
-document.write( new_situation )
-document.write( "<br>" )
-document.write( "Result: " )
-document.write( neural_network.think( new_situation ) )
