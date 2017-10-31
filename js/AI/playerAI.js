@@ -11,32 +11,36 @@ createTable() //Put this here to not be needed read the rules and click on the p
 
 function startAutoPlay(){
   var arrPopulation = []
-  timeOutControl.push(setInterval(function(){
-    for( var genControl = 0; genControl < generations; genControl++ ){
-      arrPopulation.push([])
-      for( var popControl = 0; popControl < population; popControl++ ){
-        updateGenerationInfo( genControl, popControl, 0, 0, 0)
-        arrPopulation[genControl].push( new playerSpecimen )
-        arrPopulation[genControl][popControl].construct( genControl, popControl, 0 )
-        arrPopulation[genControl][popControl] = specimenPlay( arrPopulation[genControl][popControl] )
-        console.log( "Generation : "+ genControl + " Specimen Number: " + population + " Fitness: " + arrPopulation[genControl][popControl].fitness )
-      }
+  for( var genControl = 0; genControl < generations; genControl++ ){
+    arrPopulation.push([])
+    for( var popControl = 0; popControl < population; popControl++ ){
+      updateGenerationInfo( genControl, popControl, 0, 0, 0)
+      arrPopulation[genControl].push( new playerSpecimen )
+      arrPopulation[genControl][popControl].construct( genControl, popControl, 0 )
+      arrPopulation[genControl][popControl] = specimenPlay( arrPopulation[genControl][popControl] )
+      console.log( "Generation : "+ genControl + " Specimen Number: " + popControl + " Fitness: " + arrPopulation[genControl][popControl].fitness )
     }
-    stopAutoPlay()
-  }, speed))
+  }
   console.log(arrPopulation)
 }
 
 function specimenPlay( specimen ){
+  var notMove = 0
   for ( var i = 0; i < 10000; i++ ) {
-    timeOutControl.push(setInterval(function(){
       specimen.fitness = score + moves
-      var alive = celClick( specimen.returnMove() )
-      if( alive == false ){
-        stopAutoPlay()
+      if( notMove == 6 ){ //Doing this to control if the speciemen does nothing
+        specimen.alive = false
         return specimen
       }
-    }, speed))
+      var move = specimen.returnMove()
+      if( move == 0 ){
+        notMove++
+      }else{
+        specimen.alive = celClick( specimen.returnMove() )
+        if( specimen.alive == false ){
+          return specimen
+        }
+      }
   }
   return specimen
 }
@@ -127,12 +131,5 @@ class playerSpecimen{
       cel = String( parseInt( posWarrior ) )
     }*/
     return cel
-  }
-
-  sigmoid( x, deriv = false ){
-    if( deriv == true ){
-      return ( x * ( 1 - x ) )
-    }
-    return 1 / ( 1 + pow ( -x ) )
   }
 }
