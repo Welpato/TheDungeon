@@ -2,7 +2,7 @@ var timeOutControl = []
 UsingAI = true // Setting this to not show alerts
 //I believe that variables will become maybe a field to be configuered by the user
 var generations = 2
-var population = 5
+var population = 10 //Try to use only pair numbers
 var speed = 1000
 
 
@@ -12,15 +12,71 @@ createTable() //Put this here to not be needed read the rules and click on the p
 function startAutoPlay(){
   var arrPopulation = []
   for( var genControl = 0; genControl < generations; genControl++ ){
-    arrPopulation.push([])
+    if( genControl != 0 ){
+      arrPopulation.push( evolve( arrPopulation[ genControl - 1 ] ) )
+    }else{
+      arrPopulation.push([])
+    }
     for( var popControl = 0; popControl < population; popControl++ ){
-      updateGenerationInfo( genControl, popControl, 0, 0, 0)
-      arrPopulation[genControl].push( new playerSpecimen )
-      arrPopulation[genControl][popControl].construct( genControl, popControl, [] )
-      arrPopulation[genControl][popControl] = specimenPlay( arrPopulation[genControl][popControl] )
-      console.log( "Generation : "+ genControl + " Specimen Number: " + popControl + " Fitness: " + arrPopulation[genControl][popControl].fitness )
+      if( genControl == 0 ){
+        arrPopulation[ genControl ].push( new playerSpecimen )
+        arrPopulation[ genControl ][ popControl ].construct( genControl, popControl, [] )
+      }
+      arrPopulation[ genControl ][ popControl ] = specimenPlay( arrPopulation[ genControl ][ popControl ] )
+      console.log( "Generation : "+ genControl + " Specimen Number: " + popControl + " Fitness: " + arrPopulation[ genControl ][ popControl ].fitness )
+      //updateGenerationInfo( genControl, popControl, 0, 0, 0)
     }
   }
+  console.log(arrPopulation)
+}
+
+function evolve( generation ){
+  var newGeneration = new Array()
+  var halfPop = population / 2
+  var bestSpeciemens = bestOfGeneration( generation )
+  var specControl = 0
+  for( var i = 0; i < halfPop; i++ ){
+    var newPlus = Object.assign( new playerSpecimen, generation[ i ] )
+    newPlus.fitness = 0
+    newPlus.gen += 1
+    newPlus.alive = true
+
+    var newMinus = Object.assign( new playerSpecimen, generation[ i ] )
+    newMinus.fitness = 0
+    newMinus.gen += 1
+    newMinus.alive = true
+
+    newPlus.specimen = specControl
+    specControl++
+    newMinus.specimen = specControl
+    specControl++
+    newGeneration.push( newPlus )
+    newGeneration.push( newMinus )
+  }
+  return newGeneration
+}
+
+function bestOfGeneration( generation ){
+  var control = population -1
+  while( control >= 0 ){
+    past = control - 1
+    while( past >= 0 ){
+      if( generation[ control ].fitness < generation[ past ].fitness ){
+        var x = generation[ control ]
+        generation[ control ] = generation[ past ]
+        generation[ past ] = x
+      }
+      past -= 1
+    }
+    control -= 1
+  }
+
+  var bestOfGeneration = new Array()
+  var bestNumber = population / 2
+  for( var i = 0; i < bestNumber; i++ ){
+    bestOfGeneration.push( generation[ population - 1 - i ] )
+  }
+  return Object.assign( new playerSpecimen , bestOfGeneration )
 }
 
 function specimenPlay( specimen ){
@@ -84,6 +140,16 @@ function updateGenerationInfo( generation, specimen, fitnessGeneration, fitnessS
   $( "#bestFitnessInfo" ).text( "Best Fitness: "+ fitness + " Generation: " + fitnessGeneration + " Specimen: " + fitnessSpecimen )
 }
 
+function matrixToLine( array ){
+  var arrayResult = new Array()
+  for( var x in array ){
+    for( var y in array ){
+      arrayResult.push( array[ x ][ y ] )
+    }
+  }
+  return arrayResult
+}
+
 class playerSpecimen{
   construct( generation, specimen, genome = [] ){
     this.gen = generation
@@ -126,8 +192,7 @@ class playerSpecimen{
   returnMove(){
     this.enviroment = getEnviroment()
     var posWarrior = this.warriorPosition()
-    var movement = this.neuralNetwork.think( this.enviroment )
-    console.log( movement )//Discover why this is not working
+    var movement = this.neuralNetwork.think( matrixToLine( this.enviroment ) )
 
     if( movement >= 0 && movement < 0.25 ){ // up
       cel = String( parseInt( posWarrior ) - 10 )
