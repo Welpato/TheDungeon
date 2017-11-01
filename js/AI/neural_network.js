@@ -1,8 +1,8 @@
 class NeuralNetwork{
   constructor(){
-    this.synaptic_weights = this.randomSynaptic( 9, 5 ) //input layer
-    this.synaptic_weights2 = this.randomSynaptic( 5, 4 )
-    this.synaptic_weights3 = this.randomSynaptic( 4, 1 )
+    this.synaptic_weights = this.randomSynaptic( 81, 95 ) //input layer
+    this.synaptic_weights2 = this.randomSynaptic( 95, 43 )
+    this.synaptic_weights3 = this.randomSynaptic( 43, 1 )
   }
 
   randomSynaptic( synapsesTot, axon ) {
@@ -56,8 +56,7 @@ class NeuralNetwork{
   }
 
   think( inputs ){ //The input will be the enviroment
-    var a2 = this.dot( inputs, this.synaptic_weights )
-    console.log(this.synaptic_weights)
+    var a2 = this.dot( this.transform( inputs ), this.synaptic_weights )
     a2 = this.arraySigmoid( a2 )
 
     var a3 = this.dot( a2, this.synaptic_weights2 )
