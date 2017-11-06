@@ -1,11 +1,13 @@
 var timeOutControl = []
 UsingAI = true // Setting this to not show alerts
 //I believe that variables will become maybe a field to be configuered by the user
-var generations = 2
-var population = 10 //Try to use only pair numbers
+var generations = 20
+var population = 40 //Try to use only pair numbers
 var speed = 1000
 
-
+var bestFit = 0
+var bestGen = 0
+var bestSpeciemen = 0
 
 createTable() //Put this here to not be needed read the rules and click on the play button
 
@@ -27,6 +29,8 @@ function startAutoPlay(){
       //updateGenerationInfo( genControl, popControl, 0, 0, 0)
     }
   }
+  bestOfGeneration( arrPopulation[ generations-1 ] )
+  console.log( "Generation: " + bestGen + " Specimen: " + bestSpeciemen + " Fitness: "+ bestFit)
   console.log(arrPopulation)
 }
 
@@ -40,11 +44,13 @@ function evolve( generation ){
     newPlus.fitness = 0
     newPlus.gen += 1
     newPlus.alive = true
+    newPlus.neuralNetwork.evolveSynaptics( true )
 
     var newMinus = Object.assign( new playerSpecimen, generation[ i ] )
     newMinus.fitness = 0
     newMinus.gen += 1
     newMinus.alive = true
+    newMinus.neuralNetwork.evolveSynaptics( false )
 
     newPlus.specimen = specControl
     specControl++
@@ -75,6 +81,11 @@ function bestOfGeneration( generation ){
   var bestNumber = population / 2
   for( var i = 0; i < bestNumber; i++ ){
     bestOfGeneration.push( generation[ population - 1 - i ] )
+    if( generation[ population - 1 - i ].fitness > bestFit ){
+      bestFit = generation[ population - 1 - i ].fitness
+      bestGen = generation[ population - 1 - i ].gen
+      bestSpeciemen = generation[ population - 1 - i ].specimen
+    }
   }
   return Object.assign( new playerSpecimen , bestOfGeneration )
 }

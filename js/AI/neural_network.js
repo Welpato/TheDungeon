@@ -22,6 +22,25 @@ class NeuralNetwork{
     return randomSynaptic
   }
 
+  evolveSynaptics( add ){
+    this.synaptic_weights = this.calculateNewSynaptic( this.synaptic_weights, add )
+    this.synaptic_weights2 = this.calculateNewSynaptic( this.synaptic_weights2, add )
+    this.synaptic_weights3 = this.calculateNewSynaptic( this.synaptic_weights3, add )
+  }
+
+  calculateNewSynaptic( synaptic, add = true ){
+    for( var x in synaptic ){
+      for( var y in synaptic[ x ] ){
+        if( add == true ){
+          synaptic[ x ][ y ] += 2 * Math.random() - 1
+        }else{
+          synaptic[ x ][ y ] -= 2 * Math.random() - 1
+        }
+      }
+    }
+    return synaptic
+  }
+
   sigmoid( x, derivate = false ){
     if( derivate == true ){
       return x * ( 1 - x )
