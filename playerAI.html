@@ -33,7 +33,8 @@
 			</h3>
             <p class="lead">
               <a id="btnPlay" href="#" class="btn btn-lg btn-default" onClick="javascript:createTable();stopAutoPlay();return false;"></a>
-              <a id="btnAutoPlay" href="#" class="btn btn-lg btn-default" onClick="javascript:startEvolution();">AutoPlay</a>
+              <a id="btnAutoPlay" href="#" class="btn btn-lg btn-default" onClick="javascript:startEvolution();">Training Process</a>
+              <a id="btnAutoPlay" href="#" class="btn btn-lg btn-default" onClick="javascript:startAutoPlay();">Use Model</a>
             </p>
           </div>
 		  <div id="gameArea"></div>
@@ -84,7 +85,9 @@
 	<!-- The game script -->
 	<script src="js/game.js"></script>
   <!-- AI player scritp-->
+  <script src="js/AI/models/fugitiveModel.js"></script>
   <script src="js/AI/neural_network.js"></script>
   <script src="js/AI/playerAI.js"></script>
+  <script src="js/AI/testingModel.js"></script>
   </body>
 </html>

@@ -20,7 +20,7 @@ function startEvolution(){
     for( var popControl = 0; popControl < population; popControl++ ){
       if( genControl == 0 ){
         arrPopulation[ genControl ].push( new playerSpecimen )
-        arrPopulation[ genControl ][ popControl ].construct( genControl, popControl, [] )
+        arrPopulation[ genControl ][ popControl ].construct( genControl, popControl )
       }
       arrPopulation[ genControl ][ popControl ] = specimenPlay( arrPopulation[ genControl ][ popControl ] )
       console.log( "Generation : "+ genControl + " Specimen Number: " + popControl + " Fitness: " + arrPopulation[ genControl ][ popControl ].fitness )
@@ -109,13 +109,6 @@ function specimenPlay( specimen ){
   return specimen
 }
 
-
-function stopAutoPlay(){
-  for( var time in timeOutControl ){
-    clearTimeout( time )
-  }
-}
-
 function getEnviroment(){
     enviroment = []
     x = 1
@@ -154,14 +147,21 @@ function matrixToLine( array ){
 }
 
 class playerSpecimen{
-  construct( generation, specimen, genome = [] ){
+  construct( generation, specimen){
     this.gen = generation
     this.specimen = specimen
+
     this.neuralNetwork = new NeuralNetwork()
 
     this.fitness = 0
     this.enviroment = getEnviroment()
     this.alive = true
+  }
+
+  useModel(){
+    this.neuralNetwork.synaptic_weights = model_synaptic_weight
+    this.neuralNetwork.synaptic_weights2 = model_synaptic_weight2
+    this.neuralNetwork.synaptic_weight3 = model_synaptic_weight3
   }
 
   addFitness( addedValue ){
