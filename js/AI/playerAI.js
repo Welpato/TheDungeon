@@ -1,4 +1,3 @@
-var timeOutControl = []
 UsingAI = true // Setting this to not show alerts
 //I believe that variables will become maybe a field to be configuered by the user
 var generations = 20
