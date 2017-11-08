@@ -3,7 +3,6 @@ UsingAI = true // Setting this to not show alerts
 //I believe that variables will become maybe a field to be configuered by the user
 var generations = 20
 var population = 40 //Try to use only pair numbers
-var speed = 1000
 
 var bestFit = 0
 var bestGen = 0
@@ -11,7 +10,7 @@ var bestSpeciemen = 0
 
 createTable() //Put this here to not be needed read the rules and click on the play button
 
-function startAutoPlay(){
+function startEvolution(){
   var arrPopulation = []
   for( var genControl = 0; genControl < generations; genControl++ ){
     if( genControl != 0 ){
@@ -26,7 +25,6 @@ function startAutoPlay(){
       }
       arrPopulation[ genControl ][ popControl ] = specimenPlay( arrPopulation[ genControl ][ popControl ] )
       console.log( "Generation : "+ genControl + " Specimen Number: " + popControl + " Fitness: " + arrPopulation[ genControl ][ popControl ].fitness )
-      //updateGenerationInfo( genControl, popControl, 0, 0, 0)
     }
   }
   bestOfGeneration( arrPopulation[ generations-1 ] )
@@ -146,11 +144,6 @@ function getEnviroment(){
     return enviroment
 }
 
-function updateGenerationInfo( generation, specimen, fitnessGeneration, fitnessSpecimen, fitness ){
-  $( "#generationInfo" ).text( "Generation: " + generation + " Specimen: " + specimen )
-  $( "#bestFitnessInfo" ).text( "Best Fitness: "+ fitness + " Generation: " + fitnessGeneration + " Specimen: " + fitnessSpecimen )
-}
-
 function matrixToLine( array ){
   var arrayResult = new Array()
   for( var x in array ){
@@ -166,16 +159,6 @@ class playerSpecimen{
     this.gen = generation
     this.specimen = specimen
     this.neuralNetwork = new NeuralNetwork()
-
-    /*
-    Don't need this for now
-    if( genome != [] ){
-      //I will need to increase the number of synaptics but for now this is ok
-      //Incressing the random generated number of the neural network to the better genomes of the last generation
-      this.neuralNetwork.synaptic_weights += genome[ 0 ]
-      this.neuralNetwork.synaptic_weights2 += genome[ 1 ]
-      this.neuralNetwork.synaptic_weights3 += genome[ 2 ]
-    }*/
 
     this.fitness = 0
     this.enviroment = getEnviroment()
