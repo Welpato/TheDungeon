@@ -28,6 +28,7 @@ function startEvolution(){
   }
   bestOfGeneration( arrPopulation[ generations-1 ] )
   console.log( "Generation: " + bestGen + " Specimen: " + bestSpeciemen + " Fitness: "+ bestFit)
+  saveModel( arrPopulation[ bestGen ][ population - 1 ] )
   console.log(arrPopulation)
 }
 
@@ -145,6 +146,58 @@ function matrixToLine( array ){
   }
   return arrayResult
 }
+
+/*TODO: I need to find a better way to save the best model, saving it directly on the models folder*/
+function saveModel( model ) {
+  var textModel = 'var model_synaptic_weight = [ '
+  var first = true
+  for( var line in model.neuralNetwork.synaptic_weights ){
+    if( first == true ){
+      first = false
+    }else{
+      textModel += ','
+    }
+    textModel += '['+model.neuralNetwork.synaptic_weights[ line ]+']\n \n'
+  }
+  textModel += '] \n \n'
+
+  textModel += 'var model_synaptic_weight2 = [ '
+  first = true
+  for( var line in model.neuralNetwork.synaptic_weights2 ){
+    if( first == true ){
+      first = false
+    }else{
+      textModel += ','
+    }
+    textModel += '['+model.neuralNetwork.synaptic_weights2[ line ]+']\n \n'
+  }
+  textModel += '] \n \n'
+
+  textModel += 'var model_synaptic_weight3 = [ '
+  first = true
+  for( var line in model.neuralNetwork.synaptic_weights3 ){
+    if( first == true ){
+      first = false
+    }else{
+      textModel += ','
+    }
+    textModel += '['+model.neuralNetwork.synaptic_weights3[ line ]+']\n \n'
+  }
+  textModel += '] \n \n'
+
+  var blob = new Blob([ textModel ], { type: "text/plain;charset=utf-8" } )
+  var a = document.createElement( "a" )
+  var url = URL.createObjectURL( blob )
+  a.href = url
+  a.download = 'model.js'
+  document.body.appendChild( a )
+  a.click()
+  setTimeout( function() {
+      document.body.removeChild( a )
+      window.URL.revokeObjectURL( url )
+  }, 0 )
+
+ }
 
 class playerSpecimen{
   construct( generation, specimen){
