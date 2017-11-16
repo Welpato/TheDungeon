@@ -35,6 +35,7 @@ function startEvolution(){
   console.log(arrPopulation)
 }
 
+/* I think that the problem of the fugitive model is on the evolve process of the specimens*/
 function evolve( generation ){
   var newGeneration = new Array()
   var halfPop = population / 2
@@ -274,23 +275,22 @@ class playerSpecimen{
     this.enviroment = getEnviroment()
     var posWarrior = this.warriorPosition()
     var movement = this.neuralNetwork.think( matrixToLine( this.enviroment ) )
-
-    if( movement >= 0 && movement < 0.25 ){ // up
+    if( movement >= 0 && movement <= 0.25 ){ // up
       cel = String( parseInt( posWarrior ) - 10 )
       if( posWarrior >= 11 && posWarrior < 20 ){ // Adding this to prevent innerHTML errors
         cel = String( parseInt( posWarrior ) + 10 )
       }
-    }else if(movement >= 0.25 && movement < 0.5){ // down
+    }else if(movement >= 0.25 && movement <= 0.5){ // down
       cel = String( parseInt( posWarrior ) + 10 )
       if( posWarrior >= 90 ){ // Adding this to prevent innerHTML errors
         cel = String( parseInt( posWarrior ) - 10 )
       }
-    }else if(movement >= 0.5 && movement < 0.75){ //left
+    }else if(movement >= 0.51 && movement <= 0.75){ //left
       cel = String( parseInt( posWarrior ) - 1 )
       if( posWarrior.substring( 1, 2 ) == 1 ){ // Adding this to prevent innerHTML errors
         cel = String( parseInt( posWarrior ) + 1 )
       }
-    }else if(movement >= 0.75 && movement < 1){ //right
+    }else if(movement >= 0.75 && movement <= 1){ //right
       cel = String( parseInt( posWarrior ) + 1 )
       if( posWarrior.substring( 1, 2 ) == 9 ){ // Adding this to prevent innerHTML errors
         cel = String( parseInt( posWarrior ) - 1 )
