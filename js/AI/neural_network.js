@@ -1,8 +1,9 @@
 class NeuralNetwork{
   constructor(){
-    this.synaptic_weights = this.randomSynaptic( 81, 95 ) //input layer
-    this.synaptic_weights2 = this.randomSynaptic( 95, 43 )
-    this.synaptic_weights3 = this.randomSynaptic( 43, 1 )
+    this.synaptic_weights = this.randomSynaptic( 81, 160 ) //input layer
+    this.synaptic_weights2 = this.randomSynaptic( 160, 95 )
+    this.synaptic_weights3 = this.randomSynaptic( 95, 43 )
+    this.synaptic_weights4 = this.randomSynaptic( 43, 1 )
   }
 
   randomSynaptic( synapsesTot, axon ) {
@@ -26,6 +27,7 @@ class NeuralNetwork{
     this.synaptic_weights = this.calculateNewSynaptic( this.synaptic_weights, add )
     this.synaptic_weights2 = this.calculateNewSynaptic( this.synaptic_weights2, add )
     this.synaptic_weights3 = this.calculateNewSynaptic( this.synaptic_weights3, add )
+    this.synaptic_weights4 = this.calculateNewSynaptic( this.synaptic_weights4, add )
   }
 
   calculateNewSynaptic( synaptic, add = true ){
@@ -81,7 +83,10 @@ class NeuralNetwork{
     var a3 = this.dot( a2, this.synaptic_weights2 )
     a3 = this.arraySigmoid( a3 )
 
-    var output = this.dot( a3, this.synaptic_weights3 )
+    var a4 = this.dot( a3, this.synaptic_weights2 )
+    a4 = this.arraySigmoid( a4 )
+
+    var output = this.dot( a4, this.synaptic_weights3 )
     output = this.sigmoid( output )
     return output
   }

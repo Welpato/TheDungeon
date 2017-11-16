@@ -189,6 +189,18 @@ function saveModel( model ) {
   }
   textModel += '] \n \n'
 
+  textModel += 'var model_synaptic_weight4 = [ '
+  first = true
+  for( var line in model.neuralNetwork.synaptic_weights4 ){
+    if( first == true ){
+      first = false
+    }else{
+      textModel += ','
+    }
+    textModel += '['+model.neuralNetwork.synaptic_weights4[ line ]+']\n \n'
+  }
+  textModel += '] \n \n'
+
   var blob = new Blob([ textModel ], { type: "text/plain;charset=utf-8" } )
   var a = document.createElement( "a" )
   var url = URL.createObjectURL( blob )
@@ -219,6 +231,7 @@ class playerSpecimen{
     this.neuralNetwork.synaptic_weights = model_synaptic_weight
     this.neuralNetwork.synaptic_weights2 = model_synaptic_weight2
     this.neuralNetwork.synaptic_weight3 = model_synaptic_weight3
+    this.neuralNetwork.synaptic_weight4 = model_synaptic_weight4
   }
 
   addFitness( addedValue ){
