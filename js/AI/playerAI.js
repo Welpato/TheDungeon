@@ -1,7 +1,7 @@
 UsingAI = true // Setting this to not show alerts
 //I believe that variables will become maybe a field to be configuered by the user
-var generations = 20
-var population = 40 //Try to use only pair numbers
+var generations = 100
+var population = 20 //Try to use only pair numbers
 
 var bestFit = 0
 var bestGen = 0
@@ -89,19 +89,23 @@ function bestOfGeneration( generation ){
 }
 
 function specimenPlay( specimen ){
-  var notMove = 0
+  var notKill = 0
+  var enemies = enemiesCount
   for ( var i = 0; i < 10000; i++ ) {
-      specimen.fitness = score + moves
-      if( notMove == 6 ){ //Doing this to control if the speciemen does nothing
-        specimen.alive = false
-        console.log('Died by not move')
-        return specimen
-      }
-      var move = specimen.returnMove()
-      if( move == 0 ){
-        notMove++
+      specimen.fitness = score
+      specimen.alive = celClick( specimen.returnMove() )
+
+      //All this process is to prevent the network to learn that is better to just run from the enemies
+      if( enemies == enemiesCount ){
+        notKill++
+        if( notKill == 10 ){
+          specimen.alive = false
+          console.log('Died for not killing')
+          return specimen
+        }
       }else{
-        specimen.alive = celClick( specimen.returnMove() )
+        notKill = 0
+        enemies = enemiesCount
         if( specimen.alive == false ){
           return specimen
         }
