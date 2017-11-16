@@ -1,11 +1,14 @@
 UsingAI = true // Setting this to not show alerts
 //I believe that variables will become maybe a field to be configuered by the user
-var generations = 100
-var population = 20 //Try to use only pair numbers
+var generations = 250
+var population = 10 //Try to use only pair numbers
 
 var bestFit = 0
 var bestGen = 0
 var bestSpeciemen = 0
+
+var warriorValue = 2
+var skeletonValue = 1
 
 createTable() //Put this here to not be needed read the rules and click on the play button
 
@@ -38,15 +41,26 @@ function evolve( generation ){
   var bestSpeciemens = bestOfGeneration( generation )
   var specControl = 0
   for( var i = 0; i < halfPop; i++ ){
-    var newPlus = Object.assign( new playerSpecimen, generation[ i ] )
+
+    var newPlus = new playerSpecimen
+    if( generation[ i ].notKill == false ){
+      var newPlus = Object.assign( new playerSpecimen, generation[ i ] )
+      newPlus.gen += 1
+    }else{
+      newPlus.construct( generation[ i ].gen + 1, 0)
+    }
     newPlus.fitness = 0
-    newPlus.gen += 1
     newPlus.alive = true
     newPlus.neuralNetwork.evolveSynaptics( true )
 
-    var newMinus = Object.assign( new playerSpecimen, generation[ i ] )
+    var newMinus = new playerSpecimen
+    if( generation[ i ].notKill == false ){
+      var newMinus = Object.assign( new playerSpecimen, generation[ i ] )
+      newMinus.gen += 1
+    }else{
+      newMinus.construct( generation[ i ].gen + 1, 0)
+    }
     newMinus.fitness = 0
-    newMinus.gen += 1
     newMinus.alive = true
     newMinus.neuralNetwork.evolveSynaptics( false )
 
@@ -66,9 +80,11 @@ function bestOfGeneration( generation ){
     past = control - 1
     while( past >= 0 ){
       if( generation[ control ].fitness < generation[ past ].fitness ){
-        var x = generation[ control ]
-        generation[ control ] = generation[ past ]
-        generation[ past ] = x
+        if( generation[ past ].notKill == false || generation[ control ].notKill == true){
+          var x = generation[ control ]
+          generation[ control ] = generation[ past ]
+          generation[ past ] = x
+        }
       }
       past -= 1
     }
@@ -98,9 +114,10 @@ function specimenPlay( specimen ){
       //All this process is to prevent the network to learn that is better to just run from the enemies
       if( enemies == enemiesCount ){
         notKill++
-        if( notKill == 10 ){
+        if( notKill == 20 ){
           specimen.alive = false
           console.log('Died for not killing')
+          specimen.notKill = true
           return specimen
         }
       }else{
@@ -124,10 +141,10 @@ function getEnviroment(){
         cel = x + '' + y
         switch( $( document.getElementById( cel ).innerHTML ).attr( "id" ) ){
           case 'warrior':
-            arrY.push( 1 )
+            arrY.push( warriorValue )
           break
           case 'skeleton':
-            arrY.push( 2 )
+            arrY.push( skeletonValue )
           break
           default:
             arrY.push( 0 )
@@ -219,6 +236,7 @@ class playerSpecimen{
   construct( generation, specimen){
     this.gen = generation
     this.specimen = specimen
+    this.notKill = false
 
     this.neuralNetwork = new NeuralNetwork()
 
@@ -243,7 +261,7 @@ class playerSpecimen{
     while( x <= 8 ){
       y = 0
       while( y <= 8 ){
-        if( this.enviroment[x][y] == 1 ){
+        if( this.enviroment[x][y] == warriorValue ){
            return ( x + 1 ) + "" + ( y + 1 )
         }
         y++
