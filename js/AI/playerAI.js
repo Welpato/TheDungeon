@@ -1,11 +1,12 @@
 UsingAI = true // Setting this to not show alerts
 //I believe that variables will become maybe a field to be configuered by the user
-var generations = 250
+var generations = 150
 var population = 10 //Try to use only pair numbers
 
 var bestFit = 0
 var bestGen = 0
 var bestSpeciemen = 0
+var turnsToKill = 20
 
 var warriorValue = 2
 var skeletonValue = 1
@@ -35,7 +36,6 @@ function startEvolution(){
   console.log(arrPopulation)
 }
 
-/* I think that the problem of the fugitive model is on the evolve process of the specimens*/
 function evolve( generation ){
   var newGeneration = new Array()
   var halfPop = population / 2
@@ -80,7 +80,7 @@ function bestOfGeneration( generation ){
   while( control >= 0 ){
     past = control - 1
     while( past >= 0 ){
-      if( generation[ control ].fitness < generation[ past ].fitness ){
+      if( generation[ control ].fitness <= generation[ past ].fitness ){
         if( generation[ past ].notKill == false || generation[ control ].notKill == true){
           var x = generation[ control ]
           generation[ control ] = generation[ past ]
@@ -115,7 +115,7 @@ function specimenPlay( specimen ){
       //All this process is to prevent the network to learn that is better to just run from the enemies
       if( enemies == enemiesCount ){
         notKill++
-        if( notKill == 20 ){
+        if( notKill == turnsToKill ){
           specimen.alive = false
           console.log('Died for not killing')
           specimen.notKill = true
@@ -275,6 +275,7 @@ class playerSpecimen{
     this.enviroment = getEnviroment()
     var posWarrior = this.warriorPosition()
     var movement = this.neuralNetwork.think( matrixToLine( this.enviroment ) )
+
     if( movement >= 0 && movement <= 0.25 ){ // up
       cel = String( parseInt( posWarrior ) - 10 )
       if( posWarrior >= 11 && posWarrior < 20 ){ // Adding this to prevent innerHTML errors

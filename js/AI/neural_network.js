@@ -61,14 +61,29 @@ class NeuralNetwork{
 
   dot( inputs, weights ){
     var returnValue = new Array()
-    for( var input in inputs ){
+    if( inputs[ 0 ].length == undefined ){
       returnValue.push( new Array() )
-      for( var vInput in inputs[ input ] )  {
-        for( var vWeight in weights[ vInput ] ){
-          if( returnValue[ input ][ vWeight ] == undefined ){
-            returnValue[ input ].push( inputs[ input ][ vInput ] * weights[ vInput ][ vWeight ] )
-          }else{
-            returnValue[ input ][ vWeight ] += inputs[ input ][ vInput ] * weights[ vInput ][ vWeight ]
+      for( var iValue in inputs ){
+        for( var wLine in weights ){
+          for( var wColumn in weights[ wLine ] ){
+            if( returnValue[ 0 ][ wColumn ] == undefined ){
+              returnValue[ 0 ].push( inputs[ iValue ] * weights[ wLine ][ wColumn ] )
+            }else{
+              returnValue[ 0 ][ wColumn ] += inputs[ iValue ] * weights[ wLine ][ wColumn ]
+            }
+          }
+        }
+      }
+    }else{
+      for( var iLine in inputs ){
+        returnValue.push( new Array() )
+        for( var iColumn in inputs[ iLine ] )  {
+          for( var wColumn in weights[ iLine ] ){
+            if( returnValue[ iLine ][ wColumn ] == undefined ){
+              returnValue[ iLine ].push( inputs[ iLine ][ iColumn ] * weights[ iLine ][ wColumn ] )
+            }else{
+              returnValue[ iLine ][ wColumn ] += inputs[ iLine ][ iColumn ] * weights[ iLine ][ wColumn ]
+            }
           }
         }
       }
@@ -77,21 +92,31 @@ class NeuralNetwork{
   }
 
   think( inputs ){ //The input will be the enviroment
-    var a2 = this.dot( this.transform( inputs ), this.synaptic_weights )
+    var a2 = this.dot( inputs, this.synaptic_weights )
     a2 = this.arraySigmoid( a2 )
 
     var a3 = this.dot( a2, this.synaptic_weights2 )
     a3 = this.arraySigmoid( a3 )
 
-    var a4 = this.dot( a3, this.synaptic_weights2 )
+    var a4 = this.dot( a3, this.synaptic_weights3 )
     a4 = this.arraySigmoid( a4 )
 
-    var output = this.dot( a4, this.synaptic_weights3 )
+    var output = this.dot( a4, this.synaptic_weights4 )
     output = this.sigmoid( output )
+    
     return output
   }
 
   transform( array ){
+    var result = new Array()
+    var x = 0
+    for( var value in array ){
+      result.push( [ array[ value ] ] )
+    }
+    return result
+  }
+
+  /*transform( array ){
     var result = new Array()
     var x = 0
     while( x < array[0].length ){
